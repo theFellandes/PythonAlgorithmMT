@@ -1,24 +1,23 @@
 class Heap:
-    heap = []
-    size = len(heap)
-
-    def Heap(self):
-        pass
-
-    def Heap(self, heap_array):
-        heap = heap_array
+    size = 0
 
     @staticmethod
     def get_parent(index: int):
-        return (index - 1) / 2
+        """Returns the parent of the node"""
+        return (index - 1) // 2
 
     @staticmethod
     def get_child(index: int, left: bool):
+        """Returns the left child or right child by choosing according to bool"""
         if left:
             return 2 * index + 1
         return 2 * index + 2
 
     def max_heapify(self, arr: list, i: int, n: int):
+        """Performs the max heapify operation to given indexed value and last index to
+        perform the max heapify operation.
+        i=starting index
+        n=last index for max heapify"""
         left = self.get_child(i, True)
         right = self.get_child(i, False)
 
@@ -35,13 +34,15 @@ class Heap:
             self.max_heapify(arr, largest, n)
 
     def build_max_heap(self, arr: list):
+        """Builds the max heap"""
         n = len(arr) - 1
-        for i in range(n//2, 0, -1):
+        for i in range(n//2, -1, -1):
             self.max_heapify(arr, i, n)
 
     def heapsort(self, arr: list):
+        """Performs heapsort to the heap"""
         self.build_max_heap(arr)
-        for i in range(len(arr) - 1, 1, -1):
+        for i in range(len(arr) - 1, -1, -1):
             arr[0], arr[i] = arr[i], arr[0]
             self.max_heapify(arr, 0, i - 1)
 
@@ -50,38 +51,64 @@ class Heap:
         return arr[0]
 
     def heap_extract_max(self, arr: list, n: int):
+        """Pops the root from the heap"""
         if n < 1:
             Exception("heap underflow")
         maximum = arr[0]
         arr[0] = arr[n]
         self.max_heapify(arr, 0, n-1)
+        arr.pop()
         return maximum
 
     def heap_increase_key(self, arr: list, i: int, key: int):
         if key < arr[i]:
             Exception("new key is smaller than current key")
         arr[i] = key
-        while i > 1 and arr[self.get_parent(i)] < arr[i]:
+        while i > 0 and arr[self.get_parent(i)] < arr[i]:
             arr[i], arr[self.get_parent(i)] = arr[self.get_parent(i)], arr[i]
             i = self.get_parent(i)
 
     def max_heap_insert(self, arr: list, key: int, n: int):
-        self.size += 1
-        arr[self.size - 1] = - 1
-        self.heap_increase_key(arr, n, key)
+        arr.append(-1)
+        self.heap_increase_key(arr, n + 1, key)
 
-    def insert(self, value: int):
-        self.heap[self.size - 1] = value
-        self.build_max_heap(self.heap)
 
-    def print_heap(self):
-        for i in self.heap:
-            print(i)
+def max_heapify_examples(heap: Heap):
+    arr = [16, 4, 10, 14, 7, 9, 3, 2, 8, 1]
+    arr2 = [16, 1, 11, 13, 8, 9, 3, 2, 8, 4]
+    arr3 = [1, 14, 11, 13, 8, 9, 3, 2, 8, 4]
+
+    print("arr: ")
+    heap.max_heapify(arr=arr, i=1, n=len(arr) - 1)
+    for i in arr:
+        print(i, end=', ')
+    print()
+    print("--------------")
+
+    print("arr2: ")
+    heap.max_heapify(arr=arr2, i=1, n=len(arr2) - 1)
+    for i in arr2:
+        print(i, end=', ')
+    print()
+    print("--------------")
+
+    print("arr3: ")
+    heap.max_heapify(arr=arr3, i=0, n=len(arr3) - 1)
+    for i in arr3:
+        print(i, end=', ')
+    print()
+    print("--------------")
 
 
 if __name__ == '__main__':
     heap = Heap()
-    arr = [16, 4, 10, 14, 7, 9, 3, 2, 8, 1]
-    heap.max_heapify(arr= arr, i= 1, n = len(arr) - 1)
-    for i in arr:
-        print(i)
+    max_heapify_examples(heap)
+    # arr = [5, 4, 10, 14, 7, 9, 3, 2, 8, 1]
+    # heap.max_heapify(arr= arr, i= 1, n = len(arr) - 1)
+    # heap.build_max_heap(arr)
+    # heap.heapsort(arr)
+    # heap.max_heap_insert(arr, 13, len(arr) - 1)
+    # temp = heap.heap_extract_max(arr, len(arr) - 1)
+    # heap.heap_increase_key(arr, 3, 20)
+    # print(heap.heap_maximum(arr))
+    # print(temp)

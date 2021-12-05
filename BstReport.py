@@ -5,25 +5,24 @@ import random
 
 
 def main():
-    bst = Tree()
-    insert_report(bst)
-    inorder_tree_walk_report(bst)
-    search_report(bst)
-    minimum_report(bst)
-    min_report(bst)
-    maximum_report(bst)
-    max_report(bst)
-    successor_report(bst)
-    predecessor_report(bst)
-    ratio_report(bst)
-#     DELETE EKSİK
+    # insert_report()
+    # inorder_tree_walk_report()
+    # search_report()
+    # minimum_report()
+    # min_report()
+    # maximum_report()
+    # max_report()
+    # successor_report()
+    # predecessor_report()
+    # ratio_report()
+    delete_report()
 
 
-def insert_report(bst: Tree):
+def insert_report():
     peak_value = 1000
     tree_insert_time = []
     while peak_value <= 100_000:
-
+        bst = Tree()
         tic = time.perf_counter()
         for i in range(0, peak_value):
             bst.tree_insert(random.randint(0, peak_value))
@@ -31,17 +30,19 @@ def insert_report(bst: Tree):
         tree_insert_time.append(peak_value)
         tree_insert_time.append(toc - tic)
         peak_value = peak_value + 1000
+        del bst
     print_result('insert.txt', result=tree_insert_time, unit='ms')
 
 
-def inorder_tree_walk_report(bst: Tree):
+def inorder_tree_walk_report():
     peak_value = 1000
     tree_time = []
     while peak_value <= 100_000:
+        bst = Tree()
         root = 0
-        for i in range(0, peak_value):
+        for i in range(0, peak_value + 1):
             if i == 0:
-                root = random.randint(0, peak_value)
+                root = random.randint(0, peak_value + 1)
                 bst.tree_insert(root)
             else:
                 bst.tree_insert(random.randint(0, peak_value))
@@ -52,33 +53,32 @@ def inorder_tree_walk_report(bst: Tree):
         tree_time.append(peak_value)
         tree_time.append(toc - tic)
         peak_value = peak_value + 1000
+        del bst
     print_result('inorder_tree_walk.txt', result=tree_time, unit='ms')
 
 
-def search_report(bst: Tree):
+def search_report():
     peak_value = 1000
     result = []
     while peak_value <= 100_000:
-        root = 0
+        bst = Tree()
         for i in range(0, peak_value):
-            if i == 0:
-                root = random.randint(0, peak_value)
-                bst.tree_insert(root)
-            else:
-                bst.tree_insert(random.randint(0, peak_value))
-        tic = time.perf_counter()
-        root_node = bst.tree_search(root)
-        toc = time.perf_counter()
+            bst.tree_insert(random.randint(0, peak_value))
+        tic = time.perf_counter_ns()
+        root_node = bst.tree_search(random.randint(0, peak_value))
+        toc = time.perf_counter_ns()
         result.append(peak_value)
-        result.append(toc - tic)
+        result.append((toc - tic) / 1000)
         peak_value = peak_value + 1000
-    print_result('search.txt', result=result, unit='ms')
+        del bst
+    print_result('search2.txt', result=result, unit='micros')
 
 
-def minimum_report(bst: Tree):
+def minimum_report():
     peak_value = 1000
     result = []
     while peak_value <= 100_000:
+        bst = Tree()
         root = 0
         for i in range(0, peak_value):
             if i == 0:
@@ -87,18 +87,21 @@ def minimum_report(bst: Tree):
             else:
                 bst.tree_insert(random.randint(0, peak_value))
         root_node = bst.tree_search(root)
-        tic = time.perf_counter()
+        tic = time.perf_counter_ns()
         bst.tree_minimum(root_node)
-        toc = time.perf_counter()
+        toc = time.perf_counter_ns()
         result.append(peak_value)
-        result.append(toc - tic)
+        result.append((toc - tic) / 1000)
         peak_value = peak_value + 1000
-    print_result('minimum.txt', result=result, unit='ms')
+        del bst
+    print_result('minimum.txt', result=result, unit='micros')
 
-def maximum_report(bst: Tree):
+
+def maximum_report():
     peak_value = 1000
     result = []
     while peak_value <= 100_000:
+        bst = Tree()
         root = 0
         for i in range(0, peak_value):
             if i == 0:
@@ -107,19 +110,21 @@ def maximum_report(bst: Tree):
             else:
                 bst.tree_insert(random.randint(0, peak_value))
         root_node = bst.tree_search(root)
-        tic = time.perf_counter()
+        tic = time.perf_counter_ns()
         bst.tree_maximum(root_node)
-        toc = time.perf_counter()
+        toc = time.perf_counter_ns()
         result.append(peak_value)
-        result.append(toc - tic)
+        result.append((toc - tic) / 1000)
         peak_value = peak_value + 1000
-    print_result('maximum.txt', result=result, unit='ms')
+        del bst
+    print_result('maximum.txt', result=result, unit='micros')
 
 
-def successor_report(bst: Tree):
+def successor_report():
     peak_value = 1000
     result = []
     while peak_value <= 100_000:
+        bst = Tree()
         root = 0
         for i in range(0, peak_value):
             if i == 0:
@@ -128,19 +133,21 @@ def successor_report(bst: Tree):
             else:
                 bst.tree_insert(random.randint(0, peak_value))
         root_node = bst.tree_search(root)
-        tic = time.perf_counter()
+        tic = time.perf_counter_ns()
         bst.tree_successor(root_node)
-        toc = time.perf_counter()
+        toc = time.perf_counter_ns()
         result.append(peak_value)
-        result.append(toc - tic)
+        result.append((toc - tic) / 1000)
         peak_value = peak_value + 1000
-    print_result('successor.txt', result=result, unit='ms')
+        del bst
+    print_result('successor.txt', result=result, unit='micros')
 
 
-def predecessor_report(bst: Tree):
+def predecessor_report():
     peak_value = 1000
     result = []
     while peak_value <= 100_000:
+        bst = Tree()
         root = 0
         for i in range(0, peak_value):
             if i == 0:
@@ -149,19 +156,21 @@ def predecessor_report(bst: Tree):
             else:
                 bst.tree_insert(random.randint(0, peak_value))
         root_node = bst.tree_search(root)
-        tic = time.perf_counter()
+        tic = time.perf_counter_ns()
         bst.tree_predecessor(root_node)
-        toc = time.perf_counter()
+        toc = time.perf_counter_ns()
         result.append(peak_value)
-        result.append(toc - tic)
+        result.append((toc - tic) / 1000)
         peak_value = peak_value + 1000
-    print_result('predecessor.txt', result=result, unit='ms')
+        del bst
+    print_result('predecessor.txt', result=result, unit='micros')
 
 
-def min_report(bst: Tree):
+def min_report():
     peak_value = 1000
     result = []
     while peak_value <= 100_000:
+        bst = Tree()
         root = 0
         for i in range(0, peak_value):
             if i == 0:
@@ -174,15 +183,17 @@ def min_report(bst: Tree):
         bst.tree_min_path_length(root_node)
         toc = time.perf_counter()
         result.append(peak_value)
-        result.append(toc - tic)
+        result.append((toc - tic) * 1000)
         peak_value = peak_value + 1000
-    print_result('min.txt', result=result, unit='ms')
+        del bst
+    print_result('min_path.txt', result=result, unit='micros')
 
 
-def max_report(bst: Tree):
+def max_report():
     peak_value = 1000
     result = []
     while peak_value <= 100_000:
+        bst = Tree()
         root = 0
         for i in range(0, peak_value):
             if i == 0:
@@ -195,15 +206,17 @@ def max_report(bst: Tree):
         bst.tree_max_path_length(root_node)
         toc = time.perf_counter()
         result.append(peak_value)
-        result.append(toc - tic)
+        result.append((toc - tic) * 1000)
         peak_value = peak_value + 1000
-    print_result('max.txt', result=result, unit='ms')
+        del bst
+    print_result('max_path.txt', result=result, unit='micros')
 
 
-def ratio_report(bst: Tree):
+def ratio_report():
     peak_value = 1000
     result = []
     while peak_value <= 100_000:
+        bst = Tree()
         root = 0
         for i in range(0, peak_value):
             if i == 0:
@@ -216,9 +229,27 @@ def ratio_report(bst: Tree):
         bst.tree_ratio_length(root_node)
         toc = time.perf_counter()
         result.append(peak_value)
-        result.append(toc - tic)
+        result.append((toc - tic) * 1000)
         peak_value = peak_value + 1000
-    print_result('ratio.txt', result=result, unit='ms')
+        del bst
+    print_result('ratio.txt', result=result, unit='micros')
+
+
+def delete_report():
+    peak_value = 1000
+    result = []
+    while peak_value <= 100_000:
+        bst = Tree()
+        for i in range(0, peak_value):
+            bst.tree_insert(random.randint(0, peak_value))
+        tic = time.perf_counter_ns()
+        bst.tree_delete(bst.tree_search(random.randint(0, peak_value)))
+        toc = time.perf_counter_ns()
+        result.append(peak_value)
+        result.append((toc - tic) / 1000)
+        peak_value = peak_value + 1000
+        del bst
+    print_result('delete.txt', result=result, unit='micros')
 
 
 def print_result(text_name: str, result: list, unit: str):

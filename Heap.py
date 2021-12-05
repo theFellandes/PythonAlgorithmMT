@@ -1,3 +1,6 @@
+import time
+
+
 class Heap:
     size = 0
 
@@ -102,13 +105,157 @@ def max_heapify_examples(heap: Heap):
 
 if __name__ == '__main__':
     heap = Heap()
-    max_heapify_examples(heap)
-    # arr = [5, 4, 10, 14, 7, 9, 3, 2, 8, 1]
+    # max_heapify_examples(heap)
+    arr = [5, 4, 10, 14, 7, 9, 3, 2, 8, 1]
+    arr2 = [5, 4, 10, 14, 7, 9]
+    arr3 = [9, 3, 2, 8, 1]
     # heap.max_heapify(arr= arr, i= 1, n = len(arr) - 1)
-    # heap.build_max_heap(arr)
+    tic = time.perf_counter()
+    heap.build_max_heap(arr)
+    toc = time.perf_counter()
+    print(arr, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    tic = time.perf_counter()
+    heap.build_max_heap(arr2)
+    toc = time.perf_counter()
+    print(arr2, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    tic = time.perf_counter()
+    heap.build_max_heap(arr3)
+    toc = time.perf_counter()
+    print(arr3, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    tic = time.perf_counter()
+    temp = heap.heap_extract_max(arr, len(arr) - 1)
+    toc = time.perf_counter()
+    print(temp)
+    print()
+    print(arr, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    tic = time.perf_counter()
+    temp = heap.heap_extract_max(arr2, len(arr2) - 1)
+    toc = time.perf_counter()
+    print(temp)
+    print()
+    print(arr2, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    tic = time.perf_counter()
+    temp = heap.heap_extract_max(arr3, len(arr3) - 1)
+    toc = time.perf_counter()
+    print(temp)
+    print()
+    print(arr3, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    print("----###------")
+    tic = time.perf_counter()
+    print(heap.heap_maximum(arr))
+    toc = time.perf_counter()
+    print()
+    print(arr, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    tic = time.perf_counter()
+    print(heap.heap_maximum(arr2))
+    toc = time.perf_counter()
+    print()
+    print(arr2, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    tic = time.perf_counter()
+    print(heap.heap_maximum(arr3))
+    toc = time.perf_counter()
+    print()
+    print(arr3, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    print("----@@@@@------")
+    tic = time.perf_counter()
+    print(heap.max_heap_insert(arr, 20, len(arr) - 1))
+    toc = time.perf_counter()
+    print()
+    print(arr, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    tic = time.perf_counter()
+    print(heap.max_heap_insert(arr2, 34, len(arr2) - 1))
+    toc = time.perf_counter()
+    print()
+    print(arr2, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    tic = time.perf_counter()
+    print(heap.max_heap_insert(arr3, 80, len(arr3) - 1))
+    toc = time.perf_counter()
+    print()
+    print(arr3, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    print("--------------##---------------")
+
+    tic = time.perf_counter()
+    heap.heap_increase_key(arr, 3, 20)
+    toc = time.perf_counter()
+    print()
+    print(arr, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    tic = time.perf_counter()
+    heap.heap_increase_key(arr2, 2, 20)
+    toc = time.perf_counter()
+    print()
+    print(arr2, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+    tic = time.perf_counter()
+    heap.heap_increase_key(arr3, 1, 45)
+    toc = time.perf_counter()
+    print()
+    print(arr3, end=', ')
+    print()
+    print((toc - tic) * 1000)
+
+
+    # tic = time.perf_counter()
     # heap.heapsort(arr)
+    # toc = time.perf_counter()
+    # print(arr, end=', ')
+    # print()
+    # print((toc - tic) * 1000)
+    #
+    # tic = time.perf_counter()
+    # heap.heapsort(arr2)
+    # toc = time.perf_counter()
+    # print(arr2, end=', ')
+    # print()
+    # print((toc - tic) * 1000)
+    #
+    # tic = time.perf_counter()
+    # heap.heapsort(arr3)
+    # toc = time.perf_counter()
+    # print(arr3, end=', ')
+    # print()
+    # print((toc - tic) * 1000)
+    # print("-----------------------")
     # heap.max_heap_insert(arr, 13, len(arr) - 1)
-    # temp = heap.heap_extract_max(arr, len(arr) - 1)
-    # heap.heap_increase_key(arr, 3, 20)
-    # print(heap.heap_maximum(arr))
+
     # print(temp)

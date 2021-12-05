@@ -1,4 +1,6 @@
-# DELETE EKSİK!!!!!!!
+import time
+
+
 class TreeNode:
     left_child = None
     right_child = None
@@ -7,12 +9,6 @@ class TreeNode:
 
     def __init__(self, value: int):
         self.value = value
-
-    def set_left_child(self, left_child):
-        self.left_child = left_child
-
-    def set_right_child(self, right_child):
-        self.right_child = right_child
 
     def tree_insert(self, value: int):
         if value <= self.value:
@@ -114,56 +110,30 @@ class TreeNode:
         else:
             return right_depth + 1
 
-    # def tree_delete(self, root):
-    #     # Case 1
-    #     curr = self
-    #     if self.left_child is None and self.right_child is None:
-    #         if self is not root:
-    #             if self.parent.left_child is self:
-    #                 self.parent.left_child = None
-    #             else:
-    #                 self.parent.right_child = None
-    #
-    #     # Case 2
-    #     elif self.left_child and self.right_child:
-    #         successor = self.tree_delete(self.tree_successor(self.right_child))
-    #         self.right_child.parent = successor
-    #
-    #     # Case 3
-    #     else:
-    #         if self.left_child:
-    #             child = self.left_child
-    #
-    #         else:
-    #             child = self.right_child
-    #
-    #         if self is not root:
-    #             if self is self.parent.left_child:
-    #                 self.parent.left_child = child
-    #             else:
-    #                 self.parent.right_child = child
-    #     return curr
+    def tree_delete(self):
+        if self.left_child is None or self.right_child is None:
+            y = self
+        else:
+            y = self.tree_successor(self)
 
-    def tree_delete(self, root):
-        if root is None:
-            return root
+        if y.left_child is not None:
+            x = y.left_child
+        else:
+            x = y.right_child
 
-        if root.left_child is None:
-            temp = root.right_child
-            return temp
+        if x is not None:
+            x.parent = y.parent
 
-        elif root.right_child is None:
-            temp = root.left_child
-            return temp
+        elif y is y.parent.left_child:
+            y.parent.left_child = x
 
-        temp = self.tree_successor(self)
-        root.value = temp.value
+        else:
+            y.parent.right_child = x
 
-        root.right_child = self.tree_delete(root.right_child)
+        if y is not self:
+            self.value = y.value
 
-        if root is None:
-            return
-        return root
+        return y
 
 
 class Tree:
@@ -175,84 +145,43 @@ class Tree:
         else:
             self.root.tree_insert(value)
 
-    # def tree_delete(self, node: TreeNode):
-    #     self.root = self.delete(self.root, node)
-    #
-    # def delete(self, subtree_root: TreeNode, node: TreeNode):
-    #
-    #     if subtree_root is None:
-    #         return subtree_root
-    #
-    #     if node.value < subtree_root.value:
-    #         subtree_root.set_left_child(self.delete(subtree_root.left_child, node))
-    #
-    #     elif node.value > subtree_root.value:
-    #         subtree_root.set_right_child(self.delete(subtree_root.right_child, node))
-    #
-    #     else:
-    #         # Case 1 and 2
-    #         # Handling node has 0 or 1 child
-    #         if subtree_root.left_child is None:
-    #             return subtree_root.right_child
-    #
-    #         if subtree_root.right_child is None:
-    #             return subtree_root.left_child
-    #
-    #         # Case 3
-    #         # subtree_root.
-
-    # def tree_delete(self, node: TreeNode):
-    #     if node.left_child is None or node.right_child is None:
-    #         y = node
-    #     else:
-    #         y = node.tree_successor(node)
-    #
-    #     if y.left_child is not None:
-    #         x = y.left_child
-    #     else:
-    #         x = y.right_child
-    #
-    #     if x is not None:
-    #         x.parent = y.parent
-    #
-    #     if y.parent is None:
-    #         self.root = x
-    #     elif y == y.parent.left_child:
-    #         y.parent.left_child = x
-    #     else:
-    #         y.parent.right_child = x
-    #     if y is not node:
-    #         node.tree_delete(y)
-    #     return y
-
-    # def tree_delete(self, node: TreeNode):
-    #     curr = node
-    #     if node is not self.root:
-    #         return node.tree_delete(self.root)
-    #     # Case 2
-    #     if node.left_child and node.right_child:
-    #         successor = self.tree_delete(node.tree_successor(node.right_child))
-    #         self.root.value = successor.value
-    #
-    #     # Case 3
-    #     else:
-    #         if node.left_child:
-    #             child = node.left_child
-    #
-    #         else:
-    #             child = node.right_child
-    #
-    #         if node is not self.root:
-    #             if node is node.parent.left_child:
-    #                 node.parent.left_child = child
-    #             else:
-    #                 node.parent.right_child = child
-    #         else:
-    #             self.root = child
-    #     return curr
-
     def tree_delete(self, node: TreeNode):
-        self.root = node.tree_delete(self.root)
+        if node is self.root:
+            old_root = TreeNode(self.root.value)
+            old_root.right_child = self.root.right_child
+            old_root.left_child = self.root.left_child
+            self.__delete(node)
+            return old_root
+        else:
+            return node.tree_delete()
+
+    def __delete(self, node: TreeNode):
+        if node.left_child is None or node.right_child is None:
+            y = node
+        else:
+            y = node.tree_successor(node)
+
+        if y.left_child is not None:
+            x = y.left_child
+        else:
+            x = y.right_child
+
+        if x is not None:
+            x.parent = y.parent
+
+        if y.parent is None:
+            self.root = x
+
+        elif y is y.parent.left_child:
+            y.parent.left_child = x
+
+        else:
+            y.parent.right_child = x
+
+        if y is not node:
+            node.value = y.value
+
+        return y
 
     @staticmethod
     def inorder_tree_walk(node: TreeNode):
@@ -299,6 +228,14 @@ class Tree:
 
 def main():
     int_tree = Tree()
+    int_tree2 = Tree()
+    int_tree3 = Tree()
+
+    print("---------------int_tree1------------------------------------")
+    print()
+
+    print("Insert")
+    tic = time.perf_counter_ns()
     int_tree.tree_insert(15)
     int_tree.tree_insert(5)
     int_tree.tree_insert(16)
@@ -311,28 +248,256 @@ def main():
     int_tree.tree_insert(23)
     int_tree.tree_insert(6)
     int_tree.tree_insert(7)
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
 
-    # int_tree.tree_insert(5)
-    # int_tree.tree_insert(3)
-    # int_tree.tree_insert(7)
-    # int_tree.tree_insert(2)
-    # int_tree.tree_insert(5)
-    # int_tree.tree_insert(9)
-    # int_tree.tree_insert(8)
-    # int_tree.tree_insert(8)
+    print("tree_search")
+    tic = time.perf_counter_ns()
+    root = int_tree.tree_search(15)
+    print("Result: " + str(root.value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
 
-    # print(int_tree.tree_maximum().value)
-    # print("---------------------")
-    # print(int_tree.tree_predecessor(int_tree.tree_search(7)).value)
-    # print(int_tree.tree_min_path_length(int_tree.tree_search(5)))
-    # print(int_tree.tree_max_path_length(int_tree.tree_search(5)))
-    # print(int_tree.tree_ratio_length(int_tree.tree_search(5)))
-    # print(int_tree.tree_delete(int_tree.tree_search(8)).value)
-    # print(int_tree.tree_delete(int_tree.tree_search(8)).value)
-    # print(int_tree.tree_delete(int_tree.tree_search(7)).value)
-    print(int_tree.tree_delete(int_tree.tree_search(5)))
-    print(int_tree.inorder_tree_walk(int_tree.tree_search(6)))
+    print("inorder_tree_walk")
+    tic = time.perf_counter_ns()
+    int_tree.inorder_tree_walk(root)
+    toc = time.perf_counter_ns()
+    print()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Successor: ")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree.tree_successor(root).value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Predecessor:")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree.tree_predecessor(root).value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Maximum: ")
+    tic = time.perf_counter_ns()
+    print(int_tree.tree_maximum(root).value)
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Minimum: ")
+    tic = time.perf_counter_ns()
+    print(int_tree.tree_minimum(root).value)
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Maximum Path: ")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree.tree_max_path_length(root)))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Minimum Path: ")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree.tree_min_path_length(root)))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Ratio: ")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree.tree_ratio_length(root)))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Delete: ")
+    tic = time.perf_counter_ns()
+    print("Result : " + str(int_tree.tree_delete(root).value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("############################################################")
+    print("---------------int_tree2------------------------------------")
+
+    print("Insert")
+    tic = time.perf_counter_ns()
+    int_tree2.tree_insert(5)
+    int_tree2.tree_insert(3)
+    int_tree2.tree_insert(7)
+    int_tree2.tree_insert(2)
+    int_tree2.tree_insert(5)
+    int_tree2.tree_insert(9)
+    int_tree2.tree_insert(8)
+    int_tree2.tree_insert(8)
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("tree_search")
+    tic = time.perf_counter_ns()
+    root = int_tree2.tree_search(5)
+    print("Result: " + str(root.value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("inorder_tree_walk")
+    tic = time.perf_counter_ns()
+    int_tree2.inorder_tree_walk(root)
+    toc = time.perf_counter_ns()
+    print()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    root = int_tree2.tree_search(7)
+    print("Successor: ")
+    tic = time.perf_counter_ns()
+    print(str(root.value))
+    print("Result: " + str(int_tree2.tree_successor(int_tree2.tree_search(5)).value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Predecessor:")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree2.tree_predecessor(root).value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Maximum: ")
+    tic = time.perf_counter_ns()
+    print(int_tree2.tree_maximum(root).value)
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Minimum: ")
+    tic = time.perf_counter_ns()
+    print(int_tree2.tree_minimum(root).value)
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Maximum Path: ")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree2.tree_max_path_length(root)))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Minimum Path: ")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree2.tree_min_path_length(root)))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Ratio: ")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree2.tree_ratio_length(root)))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    root = int_tree2.tree_search(9)
+    print("Delete: ")
+    tic = time.perf_counter_ns()
+    print("Result : " + str(int_tree2.tree_delete(root).value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("#######################################################")
+    print("--------------------int_tree3-------------------------------")
+
+    print("Insert")
+    tic = time.perf_counter_ns()
+    int_tree3.tree_insert(9)
+    int_tree3.tree_insert(4)
+    int_tree3.tree_insert(8)
+    int_tree3.tree_insert(1)
+    int_tree3.tree_insert(3)
+    int_tree3.tree_insert(10)
+    int_tree3.tree_insert(12)
+    int_tree3.tree_insert(11)
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("tree_search")
+    tic = time.perf_counter_ns()
+    root = int_tree3.tree_search(9)
+    print("Result: " + str(root.value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("inorder_tree_walk")
+    tic = time.perf_counter_ns()
+    int_tree3.inorder_tree_walk(root)
+    toc = time.perf_counter_ns()
+    print()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    root = int_tree3.tree_search(10)
+    print("Successor: ")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree3.tree_successor(root).value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Predecessor:")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree3.tree_predecessor(root).value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Maximum: ")
+    tic = time.perf_counter_ns()
+    print(int_tree3.tree_maximum(root).value)
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Minimum: ")
+    tic = time.perf_counter_ns()
+    print(int_tree3.tree_minimum(root).value)
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Maximum Path: ")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree3.tree_max_path_length(root)))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Minimum Path: ")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree3.tree_min_path_length(root)))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Ratio: ")
+    tic = time.perf_counter_ns()
+    print("Result: " + str(int_tree3.tree_ratio_length(root)))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+    print("Delete: ")
+    tic = time.perf_counter_ns()
+    print("Result : " + str(int_tree3.tree_delete(root).value))
+    toc = time.perf_counter_ns()
+    print(str((toc - tic) / 1000) + " microseconds")
+
+
+def main2():
+    #Testing successor and predecessor's correctness
+    int_tree2 = Tree()
+    int_tree2.tree_insert(15)
+    int_tree2.tree_insert(6)
+    int_tree2.tree_insert(18)
+    int_tree2.tree_insert(3)
+    int_tree2.tree_insert(7)
+    int_tree2.tree_insert(17)
+    int_tree2.tree_insert(20)
+    int_tree2.tree_insert(2)
+    int_tree2.tree_insert(4)
+    int_tree2.tree_insert(13)
+    int_tree2.tree_insert(9)
+
+    print(int_tree2.tree_successor(int_tree2.tree_search(15)).value)
+    print(int_tree2.tree_successor(int_tree2.tree_search(13)).value)
+    print(int_tree2.tree_successor(int_tree2.tree_search(9)).value)
+    print()
+    print(int_tree2.tree_predecessor(int_tree2.tree_search(15)).value)
+    print(int_tree2.tree_predecessor(int_tree2.tree_search(9)).value)
+    print(int_tree2.tree_predecessor(int_tree2.tree_search(7)).value)
 
 
 if __name__ == '__main__':
     main()
+    # main2()
